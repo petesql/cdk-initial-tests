@@ -1,8 +1,13 @@
 import { Construct, RemovalPolicy } from '@aws-cdk/core';
 import { Bucket, BlockPublicAccess } from '@aws-cdk/aws-s3';
 
-let s3bucketname = 'hihi';
-
+/**
+ * Create a S3 Bucket based on input params.
+ * 
+ * @param scope 
+ * @param fullBucketName name of new S3 bucket 
+ * @returns bucket name
+ */
 function createBucket(
   scope: Construct,
   fullBucketName: string,
