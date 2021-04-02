@@ -1,6 +1,7 @@
 import * as cdk from '@aws-cdk/core';
 import * as s3 from '@aws-cdk/aws-s3';
 import { BlockPublicAccess } from '@aws-cdk/aws-s3';
+import { createBucket } from '../lib/utils';
 
 export class CdkInitialTestsStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -23,8 +24,10 @@ export class CdkInitialTestsStack extends cdk.Stack {
       versioned: true,
       enforceSSL: true,
       blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
-      removalPolicy: cdk.RemovalPolicy.RETAIN, // need
+      removalPolicy: cdk.RemovalPolicy.DESTROY, // need
     });
+
+    createBucket(this, 'pwtestbuckethey')
 
   }
 }
