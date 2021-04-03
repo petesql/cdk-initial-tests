@@ -7,27 +7,41 @@ export class CdkInitialTestsStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    new s3.Bucket(this, 'mydefaultbucket', {
+    // create s3 buckets (don't use the utils function)
+    // create a default bucket
+    new s3.Bucket(this, 'simpledefaultbucket', {
+      bucketName: 'pw-simple-default-bucket',
       versioned: false,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
-
-    new s3.Bucket(this, 'myprivatebucket', {
+    // create a private bucket
+    new s3.Bucket(this, 'simpleprivatebucket', {
+      bucketName: 'pw-simple-private-bucket',
       versioned: true,
       blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
-
-    // create a bucket for general persistent usage
-    const bucket = new s3.Bucket(this, 'pwbucket', {
-      bucketName: 'bucketnameherepetehi',
+    // create a general / persistent usage bucket
+    const bucket = new s3.Bucket(this, 'generalbucket', {
+      bucketName: 'pw-simple-general-bucket',
       versioned: true,
       enforceSSL: true,
       blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
       removalPolicy: cdk.RemovalPolicy.DESTROY, // need
     });
 
-    createBucket(this, 'pwtestbuckethey')
+    // create s3 buckets (using utils function)
+    // create a bucket with default function config
+    createBucket(this, 
+      'pw-function-all-default', //shows as enabled
+    ) // buckets and objects not public
 
+    // create a bucket that overrides versioned config to false
+    createBucket(this, 
+      'pw-function-versioned-false',
+      { 
+        versioned: false, // shows as disabled
+      } // buckets and objects not public
+    )
   }
 }
