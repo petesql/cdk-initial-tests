@@ -1,11 +1,13 @@
 import { Construct, RemovalPolicy } from '@aws-cdk/core';
 import { Bucket, BlockPublicAccess, BucketProps } from '@aws-cdk/aws-s3';
+import { User, UserProps } from '@aws-cdk/aws-iam';
 
 /**
  * Create a S3 Bucket based on input params.
  * 
- * @param scope 
+ * @param scope
  * @param fullBucketName name of new S3 bucket 
+ * @param bucketConfig bucket configuration
  * @returns bucket name
  */
 function createBucket(
@@ -37,8 +39,32 @@ function createBucket(
   const bucket = new Bucket(
     scope,
     fullBucketName,
-    { ...bucketProps, ...bucketConfig },
+    { ...bucketConfig, ...bucketProps, },
   )
   return bucket;
 }
-export { createBucket };
+
+/**
+ * Create a new IAM User. 
+ * @param scope 
+ * @param fullUserName
+ * @param userConfig?
+ * @returns
+ */
+function createUser(
+  scope: Construct,
+  fullUserName: string,
+  userConfig?: UserProps,
+): User {
+  const userProps = {
+    UserName: fullUserName,
+  };
+  const user = new User (
+    scope,
+    fullUserName,
+    { ...userConfig, ...userProps }
+  )
+  return user;
+}
+
+export { createBucket, createUser };

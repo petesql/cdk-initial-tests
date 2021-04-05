@@ -1,7 +1,7 @@
 import * as cdk from '@aws-cdk/core';
 import * as s3 from '@aws-cdk/aws-s3';
 import { BlockPublicAccess } from '@aws-cdk/aws-s3';
-import { createBucket } from '../lib/utils';
+import { createBucket, createUser } from '../lib/utils';
 import { User } from '@aws-cdk/aws-iam';
 
 export class CdkInitialTestsStack extends cdk.Stack {
@@ -45,9 +45,15 @@ export class CdkInitialTestsStack extends cdk.Stack {
       } // buckets and objects not public
     )
 
-    // create a new iam user
+    // create a new iam user (don't use the utils function)
+    // create a simple user
     const user = new User(this, 'simpleuser', {
       userName: 'pw-simple-user',
-    });    
+    });
+
+    // create a simple user (using utils function)
+    createUser(this, 'pw-function-user1')
+    // create a simple user (using utils function)
+    createUser(this, 'pw-function-user2')  
   }
 }
