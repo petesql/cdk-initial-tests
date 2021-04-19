@@ -4,6 +4,9 @@ import { BlockPublicAccess } from '@aws-cdk/aws-s3';
 import { createBucket } from '../lib/s3-utils';
 import { createUser } from '../lib/iam-utils';
 import { User } from '@aws-cdk/aws-iam';
+import { Instance, Vpc, SecurityGroup, AmazonLinuxImage, InstanceType, 
+  InstanceClass, InstanceSize, AmazonLinuxGeneration, Peer, Port }
+  from '@aws-cdk/aws-ec2';
 
 export class CdkInitialTestsStack extends cdk.Stack {
   constructor(scope: cdk.Construct, id: string, props?: cdk.StackProps) {
@@ -56,5 +59,28 @@ export class CdkInitialTestsStack extends cdk.Stack {
     createUser(this, 'pw-function-user1')
     // create a simple user (using utils function)
     createUser(this, 'pw-function-user2')  
+
+    // Create new VPC
+    const vpc = new Vpc(this, 'VPC');
+
+    // Open port 22 for SSH connection from anywhere
+    const mySecurityGroup = new SecurityGroup(this, 'SecurityGroup', {
+      vpc,
+      securityGroupName: "pw-test-cdk-sg",
+      description: 'allow all outbound',
+      allowAllOutbound: true 
+    });
+    mySecurityGroup.addIngressRule(Peer.anyIpv4(), Port.tcp(22), 'allow public ssh')
+
+    // We are using the latest AMAZON LINUX AMI
+    const awsAMI = new AmazonLinuxImage({ generation: AmazonLinuxGeneration.AMAZON_LINUX_2 });
+
+    // Instance details
+    const ec2Instance = new Instance(this, 'Instance', {
+      vpc,
+      instanceType: InstanceType.of(InstanceClass.T3, InstanceSize.NANO),
+      machineImage: awsAMI,
+      securityGroup: mySecurityGroup
+    });
   }
 }
