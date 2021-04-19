@@ -1,7 +1,7 @@
 import * as cdk from '@aws-cdk/core';
 import * as s3 from '@aws-cdk/aws-s3';
 import { BlockPublicAccess } from '@aws-cdk/aws-s3';
-import { createBucket } from '../lib/utils';
+import { createBucket } from '../lib/s3-utils';
 import { createUser } from '../lib/iam-utils';
 import { User } from '@aws-cdk/aws-iam';
 
