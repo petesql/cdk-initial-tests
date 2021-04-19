@@ -1,5 +1,5 @@
 import * as cdk from '@aws-cdk/core';
-import * as s3 from '@aws-cdk/aws-s3';
+import { Bucket } from '@aws-cdk/aws-s3';
 import { BlockPublicAccess } from '@aws-cdk/aws-s3';
 import { createBucket } from '../lib/s3-utils';
 import { createUser } from '../lib/iam-utils';
@@ -14,20 +14,20 @@ export class CdkInitialTestsStack extends cdk.Stack {
 
     // create s3 buckets (don't use the utils function)
     // create a default bucket
-    new s3.Bucket(this, 'simpledefaultbucket', {
+    new Bucket(this, 'simpledefaultbucket', {
       bucketName: 'pw-simple-default-bucket',
       versioned: false,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
     // create a private bucket
-    new s3.Bucket(this, 'simpleprivatebucket', {
+    new Bucket(this, 'simpleprivatebucket', {
       bucketName: 'pw-simple-private-bucket',
       versioned: true,
       blockPublicAccess: BlockPublicAccess.BLOCK_ALL,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
     // create a general / persistent usage bucket
-    const bucket = new s3.Bucket(this, 'generalbucket', {
+    const bucket = new Bucket(this, 'generalbucket', {
       bucketName: 'pw-simple-general-bucket',
       versioned: true,
       enforceSSL: true,
